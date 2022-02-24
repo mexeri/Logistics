@@ -43,7 +43,7 @@ public class LogisticsApplication implements CommandLineRunner {
 
 //		Address address = new Address("HUN", "Budapest","Villanyi ut", 1113, 24, 15.582, 23.569);
 //		addressservice.save(address);
-		TransportPlan transportplanA = FillDatabase(new TransportPlan(5000),"A", 10);
+//		TransportPlan transportplanA = FillDatabase(new TransportPlan(5000),"A", 10);
 		TransportPlan transportplanB = FillDatabase(new TransportPlan(100000),"B", 20);
 		
 		

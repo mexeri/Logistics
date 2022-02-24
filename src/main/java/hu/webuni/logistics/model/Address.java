@@ -9,15 +9,15 @@ public class Address {
 
 	@Id
 	@GeneratedValue
-	private long id;
+	private Long id;
 	
 	private String isoCode,city,street;
 	private Integer postCode,houseNumber;
-	private double longitude,latitude;
+	private Double longitude,latitude;
 	
 	
-	public Address(String isoCode, String city, String street, Integer postCode, Integer houseNumber, double longitude,
-			double latitude) {
+	public Address(String isoCode, String city, String street, Integer postCode, Integer houseNumber, Double longitude,
+			Double latitude) {
 
 		this.isoCode = isoCode;
 		this.city = city;
@@ -32,10 +32,14 @@ public class Address {
 		
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 	
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getIsoCode() {
 		return isoCode;
 	}
@@ -66,13 +70,13 @@ public class Address {
 	public void setHouseNumber(Integer houseNumber) {
 		this.houseNumber = houseNumber;
 	}
-	public double getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
-	public double getLatitude() {
+	public Double getLatitude() {
 		return latitude;
 	}
 	public void setLatitude(double latitude) {

@@ -12,7 +12,7 @@ public class Milestone {
 
 	@Id
 	@GeneratedValue
-	private long id;
+	private Long id;
 	
 	@ManyToOne
 	private Address address;
@@ -28,7 +28,7 @@ public class Milestone {
 		
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}	
 	

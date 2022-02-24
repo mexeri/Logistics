@@ -13,9 +13,9 @@ public class TransportPlan {
 
 	@Id
 	@GeneratedValue
-	private long id;
+	private Long id;
 	
-	private long expectedIncome;
+	private Long expectedIncome;
 
 
 	//@JsonIgnore
@@ -28,17 +28,17 @@ public class TransportPlan {
 	}
 	
 	
-	public long getExpectedIncome() {
+	public Long getExpectedIncome() {
 		return expectedIncome;
 	}
 
 
-	public void setExpectedIncome(long expectedIncome) {
+	public void setExpectedIncome(Long expectedIncome) {
 		this.expectedIncome = expectedIncome;
 	}
 
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 

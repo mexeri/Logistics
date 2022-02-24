@@ -12,7 +12,7 @@ public class Section {
 
 	@Id
 	@GeneratedValue
-	private long id;
+	private Long id;
 	
 	private int numberinPlan;
 	
@@ -40,7 +40,7 @@ public class Section {
 	
 
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
