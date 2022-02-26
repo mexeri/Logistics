@@ -11,6 +11,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class TransportPlan {
 
+
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -22,6 +23,8 @@ public class TransportPlan {
 	@OneToMany(mappedBy = "transportplan")
 	private List<Section> sections;
 
+	public TransportPlan() {
+	}
 
 	public TransportPlan(long expectedIncome) {
 		this.expectedIncome = expectedIncome;

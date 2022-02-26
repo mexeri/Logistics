@@ -56,6 +56,7 @@ public class LogisticsApplication implements CommandLineRunner {
 		transportplanservice.addTransportPlan(transportplan);
 		Section section= new Section();
 		Milestone milestone = new Milestone();
+		Address address = new Address();
 		int iSectionNuminPlan=0;
 		
 		for(int i=0; i<iIterationLimit;i++)
@@ -63,13 +64,14 @@ public class LogisticsApplication implements CommandLineRunner {
 		
 			if(i % 2 == 0)
 			{
-				if (i == 0) milestone = SetMilestoneandAddress(sExtra, i);
-									
+				if (i == 0) address = SetAddress(sExtra, i);
+				milestone = SetMilestone(i, address);				
 				section = new Section(iSectionNuminPlan,transportplan,milestone,null);
 				iSectionNuminPlan++;
 			}
 			else {
-				milestone = SetMilestoneandAddress(sExtra, i);
+				address = SetAddress(sExtra, i);
+				milestone = SetMilestone(i,address);
 				section.setToMilestone(milestone);
 				sectionservice.addSection(section);
 				transportplan.setSections(section);
@@ -81,15 +83,17 @@ public class LogisticsApplication implements CommandLineRunner {
 		
 	}
 
-	private Milestone SetMilestoneandAddress(String sExtra, int i) {
-		Address address;
-		Milestone milestone;
-		address = new Address("HUN", "City" + sExtra + Integer.toString(i),
-				"Street" + sExtra + Integer.toString(i), 1000 + i, 1 + i, 15.2 + i, 10.3 + i);
-		addressservice.addAddress(address);
-		milestone = new Milestone(address, LocalDateTime.now().plusHours(i));
+	private Milestone SetMilestone(int i, Address address) {
+		Milestone milestone  = new Milestone(address, LocalDateTime.now().plusHours(i));
 		milestoneservice.addMilestone(milestone);
 		return milestone;
+	}
+	
+	private Address SetAddress(String sExtra, int i) {
+		Address address = new Address("HUN", "City" + sExtra + Integer.toString(i),
+				"Street" + sExtra + Integer.toString(i), 1000 + i, 1 + i, 15.2 + i, 10.3 + i);
+		addressservice.addAddress(address);
+		return address;
 	}
 	
 

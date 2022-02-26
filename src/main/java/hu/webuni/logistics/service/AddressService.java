@@ -1,6 +1,7 @@
 package hu.webuni.logistics.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -24,13 +25,30 @@ public class AddressService {
 	
 	@Transactional
 	public Optional<Address> addAddress(Address address) {
-		if(!CheckAddress(address))return Optional.empty();
+		if(!CheckAddress(address,null))return Optional.empty();
 		return Optional.ofNullable(addressRepository.save(address));
 	}
 	
-	private Boolean CheckAddress(Address address) {
+	@Transactional
+	public Optional<Address> updateAddress(Address address, long pathId) {
+		if(!addressRepository.existsById(pathId))throw new NoSuchElementException();
+		if(!CheckAddress(address,pathId))return Optional.empty();
+		address.setId(pathId);
+		return Optional.ofNullable(addressRepository.save(address));
+	}
+	
+	
+	
+	
+	
+	private Boolean CheckAddress(Address address, Long lPathId) {
 		if (address == null)return false;			
-		if (address.getId() != null)return false;
+		if (address.getId() != null)
+		{
+			if(lPathId==null)return false;
+			else if(lPathId!=address.getId()) return false;
+					
+		}			
 		if (address.getIsoCode() == null || address.getIsoCode() == "")return false;
 		if (address.getCity() == null || address.getCity() == "")return false;
 		if (address.getPostCode() == null)return false;
@@ -38,7 +56,10 @@ public class AddressService {
 		if (address.getHouseNumber() == null)return false;
 
 		return true;
-	}
+	 }
+	
+	
+	
 	
 	 public List<Address> findAll() {
 		 return addressRepository.findAll();
@@ -46,14 +67,17 @@ public class AddressService {
 	 
 	 public Optional<Address> findById(long id) {
 			return addressRepository.findById(id);
-		}
+	 }
 	 
 	 @Transactional
 	 public void delete(long id) {
+		 if(addressRepository.existsById(id)) {
 		 milestoneService.RemoveAddressFK(id);
-		 addressRepository.deleteById(id);		 
+		 addressRepository.deleteById(id);		
+		 }
+		
 		 
 	 }
 	 
-	
+	 
 }
