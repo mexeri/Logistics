@@ -1,24 +1,23 @@
 package hu.webuni.logistics.dto;
 
-
-
 public class DelayDto {
 
 	public Long milestoneId;
 	public Integer delayLength;
 	
-	public Long getlMilestoneId() {
+	public Long getMilestoneId() {
 		return milestoneId;
 	}
-	public void setlMilestoneId(Long milestoneId) {
+	public void setMilestoneId(Long milestoneId) {
 		this.milestoneId = milestoneId;
 	}
-	public Integer getiDelayLength() {
+	public Integer getDelayLength() {
 		return delayLength;
 	}
-	public void setiDelayLength(Integer delayLength) {
+	public void setDelayLength(Integer delayLength) {
 		this.delayLength = delayLength;
 	}
 
-	
+
+
 }

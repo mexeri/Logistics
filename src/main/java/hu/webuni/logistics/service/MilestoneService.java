@@ -56,19 +56,21 @@ public class MilestoneService {
 			Boolean bMsfoundinTp = false;
 			Section section;
 
+			// van-e ilyen milestone a DB-ben
+			if (!findAll().stream().anyMatch(m -> m.getId() == lMilestoneId))
+				throw new NoSuchElementException();
+			
 			// van-e ilyen tplan
 			TransportPlan transportPlan = transportPlanService.findById(lTpId)
 					.orElseThrow(() -> new NoSuchElementException());
 
-			// van-e ilyen milestone a DB-ben
-			if (!findAll().stream().anyMatch(m -> m.getId() == lMilestoneId))
-				throw new NoSuchElementException();
 
 			// benne van-e valamelyik section FROM milestonejában
 			section = SectionFilter(transportPlan, m -> m.getFromMilestone().getId() == lMilestoneId);
 
 			if (section != null) {
 				bMsfoundinTp = true;
+				transportPlanService.SetExpectedIncome(transportPlan, iDelay);
 				SetMilestone(section.getFromMilestone(), iDelay);
 				SetMilestone(section.getToMilestone(), iDelay);			
 			} else {// benne van-e vmelyik section TO milestonejában
@@ -77,6 +79,7 @@ public class MilestoneService {
 						
 				if (section != null) {
 					bMsfoundinTp = true;
+					transportPlanService.SetExpectedIncome(transportPlan, iDelay);
 					SetMilestone(section.getToMilestone(), iDelay);
 					int iNextSNr = section.getNumberinPlan() + 1;
 
@@ -91,7 +94,11 @@ public class MilestoneService {
 		}
 		
 		private Section SectionFilter(TransportPlan transportPlan, Predicate<? super Section> predicate) {
-			return transportPlan.getSections().stream().filter(predicate).findFirst().get();			
+			try {
+			return transportPlan.getSections().stream().filter(predicate).findFirst().get();
+			}catch(NoSuchElementException e) {
+				return null;
+			}
 		}
 		
 		private void SetMilestone(Milestone milestone, int delay) {

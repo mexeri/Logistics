@@ -7,7 +7,13 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import hu.webuni.logistics.model.Address;
 import hu.webuni.logistics.repository.AddressRepository;
@@ -46,8 +52,7 @@ public class AddressService {
 		if (address.getId() != null)
 		{
 			if(lPathId==null)return false;
-			else if(lPathId!=address.getId()) return false;
-					
+			else if(lPathId!=address.getId()) return false;					
 		}			
 		if (address.getIsoCode() == null || address.getIsoCode() == "")return false;
 		if (address.getCity() == null || address.getCity() == "")return false;
@@ -72,11 +77,31 @@ public class AddressService {
 	 @Transactional
 	 public void delete(long id) {
 		 if(addressRepository.existsById(id)) {
-		 milestoneService.RemoveAddressFK(id);
+		 milestoneService.RemoveAddressFK(id);//foreign key eltávolítása milestoneból, h lehessen törölni
 		 addressRepository.deleteById(id);		
 		 }
-		
+				 
+	 }
+	 
+	 public Page<Address> findAddressbyExample(Address example, Pageable page){
 		 
+		 Integer postCode = example.getPostCode();
+		 String countryISO = example.getIsoCode();
+		 String city = example.getCity();
+		 String street = example.getStreet();
+		 
+		 Specification<Address> spec = Specification.where(null);
+		 if(postCode!=null)
+			 spec = spec.and(AddressSpecifications.haspostCode(postCode));
+		 if(StringUtils.hasText(countryISO))
+			 spec = spec.and(AddressSpecifications.hasISO(countryISO));
+		 if(StringUtils.hasText(city))
+			 spec = spec.and(AddressSpecifications.hascity(city));
+		 if(StringUtils.hasText(street))
+			 spec = spec.and(AddressSpecifications.hasstreet(street));
+		 		 
+		 
+		 return addressRepository.findAll(spec, page);
 	 }
 	 
 	 

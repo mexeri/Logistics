@@ -1,10 +1,25 @@
 package hu.webuni.logistics.web;
 
-import java.util.List;
-import java.util.NoSuchElementException;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+
+import javax.persistence.Convert;
+
+import java.util.Map.Entry;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -68,16 +84,34 @@ public class AddressController {
 		 }catch (NoSuchElementException e) {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 			}
-		 
-		 
-		 
+		 	 
 		 
 	 }
 	 
 	 @DeleteMapping("/{id}")
 	 public void deleteAddress(@PathVariable long id) {
-		 addresService.delete(id);
-
-		
+		 addresService.delete(id);	
 	 }
+	 
+	 
+	 @PostMapping("/search")
+	 public ResponseEntity<List<AddressDto>> search(@RequestParam(required=false) String search, 
+			 @PageableDefault(page = 0, size= Integer.MAX_VALUE, sort = "id") Pageable pageable, 
+			 @RequestBody AddressDto addressDto ) 
+	 {
+		 Address address = addressMapper.dtoToAddress(addressDto);
+		 if(address==null)throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+		 Page<Address> page = addresService.findAddressbyExample(address, pageable);
+		 HttpHeaders headers = new HttpHeaders();
+		 headers.add("X-Total-Count",Long.toString(page.getTotalElements()));
+		 return ResponseEntity.ok()
+				 		.headers(headers)
+				 		.body(addressMapper.addressesToDtos(page.getContent()));					 
+				
+	 }
+	 
+	 
+	 
+	 
+	 
 }
