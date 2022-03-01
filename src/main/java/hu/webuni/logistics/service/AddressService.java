@@ -48,7 +48,7 @@ public class AddressService {
 	
 	
 	private Boolean CheckAddress(Address address, Long lPathId) {
-		if (address == null)return false;			
+		//if (address == null)return false;			
 		if (address.getId() != null)
 		{
 			if(lPathId==null)return false;

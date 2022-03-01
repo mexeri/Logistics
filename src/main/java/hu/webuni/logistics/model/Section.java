@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 
 @Entity
@@ -16,13 +17,15 @@ public class Section {
 	
 	private int numberinPlan;
 	
-	@ManyToOne // ez egy foreign key a transportplan táblából
+	@ManyToOne // foreign key a transportplan táblából
 	private TransportPlan transportplan;
 	
-	@ManyToOne
+	//@ManyToOne
+	@OneToOne //minden milestone unique
 	private Milestone fromMilestone;
 	
-	@ManyToOne
+	//@ManyToOne
+	@OneToOne
 	private Milestone toMilestone;
 
 	

@@ -15,6 +15,7 @@ import hu.webuni.logistics.model.Milestone;
 import hu.webuni.logistics.model.Section;
 import hu.webuni.logistics.model.TransportPlan;
 import hu.webuni.logistics.service.AddressService;
+import hu.webuni.logistics.service.InitDBService;
 import hu.webuni.logistics.service.MilestoneService;
 import hu.webuni.logistics.service.SectionService;
 import hu.webuni.logistics.service.TransportPlanService;
@@ -23,16 +24,7 @@ import hu.webuni.logistics.service.TransportPlanService;
 public class LogisticsApplication implements CommandLineRunner {
 	
 	@Autowired
-	AddressService addressservice;
-	
-	@Autowired
-	TransportPlanService transportplanservice;
-
-	@Autowired
-	SectionService sectionservice;
-	
-	@Autowired
-	MilestoneService milestoneservice;
+	InitDBService initDbService;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(LogisticsApplication.class, args);
@@ -41,60 +33,16 @@ public class LogisticsApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-//		Address address = new Address("HUN", "Budapest","Villanyi ut", 1113, 24, 15.582, 23.569);
-//		addressservice.save(address);
-		TransportPlan transportplanA = FillDatabase(new TransportPlan(5000.0),"A", 10);
-		TransportPlan transportplanB = FillDatabase(new TransportPlan(100000.2),"B", 20);
+		
+		initDbService.FillDatabase(5000.0,"A", 10,LocalDateTime.of(2022, 2, 28, 10, 0));
+		initDbService.FillDatabase(100000.2,"B", 20,LocalDateTime.of(2022, 3, 1, 12, 0));
 		
 		
 		//System.in.read();
 		
 	}
 
-	private TransportPlan FillDatabase(TransportPlan transportplan,String sExtra, int iIterationLimit)
-	{
-		transportplanservice.addTransportPlan(transportplan);
-		Section section= new Section();
-		Milestone milestone = new Milestone();
-		Address address = new Address();
-		int iSectionNuminPlan=0;
-		
-		for(int i=0; i<iIterationLimit;i++)
-		{
-		
-			if(i % 2 == 0)
-			{
-				if (i == 0) address = SetAddress(sExtra, i);
-				milestone = SetMilestone(i, address);				
-				section = new Section(iSectionNuminPlan,transportplan,milestone,null);
-				iSectionNuminPlan++;
-			}
-			else {
-				address = SetAddress(sExtra, i);
-				milestone = SetMilestone(i,address);
-				section.setToMilestone(milestone);
-				sectionservice.addSection(section);
-				transportplan.setSections(section);
-			}			
-			
-		}
-		
-		return transportplan;
-		
-	}
-
-	private Milestone SetMilestone(int i, Address address) {
-		Milestone milestone  = new Milestone(address, LocalDateTime.now().plusHours(i));
-		milestoneservice.addMilestone(milestone);
-		return milestone;
-	}
 	
-	private Address SetAddress(String sExtra, int i) {
-		Address address = new Address("HUN", "City" + sExtra + Integer.toString(i),
-				"Street" + sExtra + Integer.toString(i), 1000 + i, 1 + i, 15.2 + i, 10.3 + i);
-		addressservice.addAddress(address);
-		return address;
-	}
 	
 
 }

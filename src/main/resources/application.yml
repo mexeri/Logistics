@@ -1,4 +1,8 @@
+
 spring:
+  profiles:
+    active:
+    - prod
   datasource:
     url: jdbc:postgresql://localhost:5432/logistics
     username: postgres
@@ -7,10 +11,12 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create
+
 logistics:
   limits:
     30: 1
     60: 2
     120: 5.3
+
 
 logging.level.org.springframework.security: DEBUG

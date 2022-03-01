@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -19,7 +20,8 @@ public class TransportPlan {
 	private Double expectedIncome;
 
 
-	//@JsonIgnore
+	
+	//@OneToMany(mappedBy = "transportplan", fetch = FetchType.EAGER)
 	@OneToMany(mappedBy = "transportplan")
 	private List<Section> sections;
 

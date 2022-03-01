@@ -5,6 +5,11 @@ public class DelayDto {
 	public Long milestoneId;
 	public Integer delayLength;
 	
+	public DelayDto(Long milestoneId, Integer delayLength) {
+		this.milestoneId = milestoneId;
+		this.delayLength = delayLength;
+	}
+	
 	public Long getMilestoneId() {
 		return milestoneId;
 	}
